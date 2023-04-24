@@ -1,0 +1,17 @@
+[package]
+name = "clock"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+opt-level     = "s"
+codegen-units = 1
+debug = false
+lto   = true
+rpath = false
+strip = true
+
+[dependencies]
+anyhow = "1.0"
+image = "0.24"
+raylib = "3.7"
