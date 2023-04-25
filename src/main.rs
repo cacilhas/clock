@@ -41,7 +41,7 @@ fn main() {
     img.width = iw as i32;
     img.height = ih as i32;
     img.mipmaps = 1;
-    img.format = PixelFormat::PIXELFORMAT_PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 as i32;
+    img.format = PixelFormat::PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 as i32;
     img.data = raw.as_ptr() as *mut c_void;
     mem::forget(raw);
 

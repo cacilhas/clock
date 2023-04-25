@@ -3,6 +3,9 @@ name = "clock"
 version = "0.1.0"
 edition = "2021"
 
+[net]
+git-fetch-with-cli = true
+
 [profile.release]
 opt-level     = "s"
 codegen-units = 1
@@ -14,4 +17,8 @@ strip = true
 [dependencies]
 anyhow = "1.0"
 image = "0.24"
-raylib = "3.7"
+
+[dependencies.raylib]
+version = "4.5"
+git = "https://github.com/litten2up/raylib-rs"
+branch = "4.5.0"
