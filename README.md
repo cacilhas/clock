@@ -1,5 +1,5 @@
 [3-Clause BSD License]: https://opensource.org/license/bsd-3-clause/
-[COPYING]: /COPYING
+[COPYING]: https://github.com/cacilhas/clock/blob/master/COPYING
 [X11]: https://en.wikipedia.org/wiki/X_Window_System
 
 # Kodumaro Clock
