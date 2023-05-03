@@ -20,7 +20,7 @@ fn main() {
     rl.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
     let foreground = Color::BLACK;
     let secscolour = Color::RED;
-    let background = Color::new(0xff, 0xff, 0xff, 0x00);
+    let background = Color::new(0x00, 0x00, 0x00, 0x00);
     let angle_offset = -TAU / 4.0;
     let hour_pointer = 50.0;
     let min_pointer = 90.0;
@@ -50,6 +50,11 @@ fn main() {
     let raw = include_bytes!("assets/mins.png").to_vec();
     let img = Image::load_image_from_mem(".png", &raw, raw.len() as i32).unwrap();
     let backmins = rl.load_texture_from_image(&thr, &img).unwrap();
+
+    // UTC
+    let raw = include_bytes!("assets/utc.png").to_vec();
+    let img = Image::load_image_from_mem(".png", &raw, raw.len() as i32).unwrap();
+    let backutc = rl.load_texture_from_image(&thr, &img).unwrap();
 
     while !rl.window_should_close() {
         let time = SystemTime::now()
@@ -83,6 +88,7 @@ fn main() {
                 Color::WHITE,
             );
             draw.draw_texture(&backmins, 0, 0, Color::WHITE);
+            draw.draw_texture(&backutc, 0, 0, Color::WHITE);
 
             for r in 98..100 {
                 draw.draw_circle_lines(cx as i32, cy as i32, r as f32, foreground);
