@@ -1,7 +1,14 @@
 [package]
-name = "clock"
-version = "0.1.0"
-edition = "2021"
+name        = "kodumaro-clock"
+version     = "0.1.0"
+authors     = ["Rodrigo Montegasppα Cacilhας <montegasppa@cacilhas.info"]
+license     = "BSD-3-Clause"
+readme      = "README.md"
+homepage    = "https://github.com/cacilhas/clock"
+repository  = "https://github.com/cacilhas/clock"
+keywords    = ["clock", "raylib"]
+description = "Yet another X11 clock."
+edition     = "2021"
 
 [profile.release]
 opt-level     = "s"
@@ -12,7 +19,6 @@ rpath = false
 strip = true
 
 [dependencies]
-anyhow = "1.0"
 chrono = "0.4"
 
 [dependencies.raylib]
