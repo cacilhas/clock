@@ -5,6 +5,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
+use chrono::{DateTime, Local};
 use raylib::prelude::*;
 
 fn main() {
@@ -24,10 +25,25 @@ fn main() {
     let min_pointer = 90.0;
     let sec_pointer = 95.0;
 
+    let tz: DateTime<Local> = SystemTime::now().into();
+    let tz = tz.offset().local_minus_utc() as f32 / 3600.0;
+    let rotation = -360.0 * tz / 12.0; // Raylib DrawTexturePro uses degrees instead of radians
+
     // Hour numbers
     let raw = include_bytes!("assets/hours.png").to_vec();
     let img = Image::load_image_from_mem(".png", &raw, raw.len() as i32).unwrap();
     let backhours = rl.load_texture_from_image(&thr, &img).unwrap();
+    let backhours_rect = Rectangle {
+        width: img.width() as f32,
+        height: img.height() as f32,
+        ..Default::default()
+    };
+    let backhours_center_rect = Rectangle {
+        x: cx,
+        y: cy,
+        width: img.width() as f32,
+        height: img.height() as f32,
+    };
 
     while !rl.window_should_close() {
         let time = SystemTime::now()
@@ -52,7 +68,14 @@ fn main() {
             let mut draw = draw.begin_mode2D(&camera);
 
             draw.clear_background(background);
-            draw.draw_texture(&backhours, 0, 0, Color::WHITE);
+            draw.draw_texture_pro(
+                &backhours,
+                &backhours_rect,
+                &backhours_center_rect,
+                centre,
+                rotation,
+                Color::WHITE,
+            );
 
             for r in 98..100 {
                 draw.draw_circle_lines(cx as i32, cy as i32, r as f32, foreground);
