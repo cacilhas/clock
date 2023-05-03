@@ -31,9 +31,7 @@ fn main() {
     let rotation = -360.0 * tz / 12.0; // Raylib DrawTexturePro uses degrees instead of radians
 
     // Hour numbers
-    let raw = include_bytes!("assets/hours.png").to_vec();
-    let img = Image::load_image_from_mem(".png", &raw, raw.len() as i32).unwrap();
-    let backhours = rl.load_texture_from_image(&thr, &img).unwrap();
+    let (backhours, img) = load_texture(&mut rl, &thr, include_bytes!("assets/hours.png")).unwrap();
     let backhours_rect = Rectangle {
         width: img.width() as f32,
         height: img.height() as f32,
@@ -47,14 +45,10 @@ fn main() {
     };
 
     // Minute numbers
-    let raw = include_bytes!("assets/mins.png").to_vec();
-    let img = Image::load_image_from_mem(".png", &raw, raw.len() as i32).unwrap();
-    let backmins = rl.load_texture_from_image(&thr, &img).unwrap();
+    let (backmins, _) = load_texture(&mut rl, &thr, include_bytes!("assets/mins.png")).unwrap();
 
     // UTC
-    let raw = include_bytes!("assets/utc.png").to_vec();
-    let img = Image::load_image_from_mem(".png", &raw, raw.len() as i32).unwrap();
-    let backutc = rl.load_texture_from_image(&thr, &img).unwrap();
+    let (backutc, _) = load_texture(&mut rl, &thr, include_bytes!("assets/utc.png")).unwrap();
 
     while !rl.window_should_close() {
         let time = SystemTime::now()
@@ -107,4 +101,13 @@ fn main() {
             draw.draw_line_ex(centre, Vector2::new(x, y), 1.0, secscolour);
         }
     }
+}
+
+fn load_texture(
+    rl: &mut RaylibHandle,
+    thr: &RaylibThread,
+    raw: &[u8],
+) -> Result<(Texture2D, Image), String> {
+    let img = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32).unwrap();
+    Ok((rl.load_texture_from_image(&thr, &img)?, img))
 }
