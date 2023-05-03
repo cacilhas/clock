@@ -1,6 +1,6 @@
 extern crate raylib;
 
-use std::{f32::consts::TAU, time::SystemTime};
+use std::{f32::consts::TAU, io, time::SystemTime};
 
 use chrono::{DateTime, Local, NaiveTime, Utc};
 use raylib::prelude::*;
@@ -18,7 +18,6 @@ fn main() {
     let foreground = Color::BLACK;
     let secscolour = Color::RED;
     let background = Color::new(0x00, 0x00, 0x00, 0x00);
-    let angle_offset = -TAU / 4.0;
     let hour_pointer = 50.0;
     let min_pointer = 90.0;
     let sec_pointer = 95.0;
@@ -50,14 +49,10 @@ fn main() {
     rl.set_window_title(&thr, "Kodumaro Clock");
 
     while !rl.window_should_close() {
-        let time = Utc::now().time() - NaiveTime::from_hms_opt(0, 0, 0).unwrap();
-        let time = (time.num_milliseconds() as f32) / 1_000.0;
-        let secs = time % 60.0;
-        let mins = (time / 60.0) % 60.0;
-        let hours = (time / 3600.0) % 12.0;
-        let secs_angle = secs * TAU / 60.0 + angle_offset;
-        let mins_angle = mins * TAU / 60.0 + angle_offset;
-        let hours_angle = hours * TAU / 12.0 + angle_offset;
+        let (hours, mins, secs) = get_time().unwrap();
+        let secs_angle = get_angle(secs, 60.0);
+        let mins_angle = get_angle(mins, 60.0);
+        let hours_angle = get_angle(hours, 12.0);
 
         let mut draw = rl.begin_drawing(&thr);
         {
@@ -105,4 +100,20 @@ fn load_texture(
 ) -> Result<(Texture2D, Image), String> {
     let img = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32).unwrap();
     Ok((rl.load_texture_from_image(&thr, &img)?, img))
+}
+
+fn get_time() -> io::Result<(f32, f32, f32)> {
+    let midnight =
+        NaiveTime::from_hms_opt(0, 0, 0).ok_or(io::Error::from(io::ErrorKind::InvalidData))?;
+    let time = Utc::now().time() - midnight;
+    let time = (time.num_milliseconds() as f32) / 1_000.0;
+    let secs = time % 60.0;
+    let mins = (time / 60.0) % 60.0;
+    let hours = (time / 3600.0) % 12.0;
+    Ok((hours, mins, secs))
+}
+
+fn get_angle(value: f32, max_value: f32) -> f32 {
+    let offset = -TAU / 4.0;
+    value * TAU / max_value + offset
 }
