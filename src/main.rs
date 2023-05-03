@@ -1,5 +1,3 @@
-extern crate raylib;
-
 use std::{f32::consts::TAU, io, time::SystemTime};
 
 use chrono::{DateTime, Local, NaiveTime, Utc};
