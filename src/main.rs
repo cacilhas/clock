@@ -1,11 +1,8 @@
 extern crate raylib;
 
-use std::{
-    f32::consts::TAU,
-    time::{SystemTime, UNIX_EPOCH},
-};
+use std::{f32::consts::TAU, time::SystemTime};
 
-use chrono::{DateTime, Local};
+use chrono::{DateTime, Local, NaiveTime, Utc};
 use raylib::prelude::*;
 
 fn main() {
@@ -53,12 +50,8 @@ fn main() {
     rl.set_window_title(&thr, "Kodumaro Clock");
 
     while !rl.window_should_close() {
-        let time = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_millis()
-            % 86_400_000;
-        let time = (time as f32) / 1_000.0;
+        let time = Utc::now().time() - NaiveTime::from_hms_opt(0, 0, 0).unwrap();
+        let time = (time.num_milliseconds() as f32) / 1_000.0;
         let secs = time % 60.0;
         let mins = (time / 60.0) % 60.0;
         let hours = (time / 3600.0) % 12.0;
