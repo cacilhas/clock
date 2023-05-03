@@ -52,7 +52,7 @@ fn main() {
             let mut draw = draw.begin_mode2D(&camera);
 
             draw.clear_background(background);
-            draw.draw_texture(&backhours, 0, 0, foreground);
+            draw.draw_texture(&backhours, 0, 0, Color::WHITE);
 
             for r in 98..100 {
                 draw.draw_circle_lines(cx as i32, cy as i32, r as f32, foreground);
