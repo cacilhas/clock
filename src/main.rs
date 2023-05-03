@@ -16,8 +16,8 @@ fn main() {
         .title("Clock")
         .build();
     rl.set_target_fps(15);
-    let foreground = Color::new(0x00, 0x00, 0x00, 0xff);
-    let secscolour = Color::new(0xff, 0x00, 0x00, 0xff);
+    let foreground = Color::BLACK;
+    let secscolour = Color::RED;
     let background = Color::new(0xff, 0xff, 0xff, 0x00);
     let angle_offset = -TAU / 4.0;
     let hour_pointer = 50.0;
