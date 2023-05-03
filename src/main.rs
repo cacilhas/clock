@@ -50,6 +50,8 @@ fn main() {
     // UTC
     let (backutc, _) = load_texture(&mut rl, &thr, include_bytes!("assets/utc.png")).unwrap();
 
+    rl.set_window_title(&thr, "Kodumaro Clock");
+
     while !rl.window_should_close() {
         let time = SystemTime::now()
             .duration_since(UNIX_EPOCH)
