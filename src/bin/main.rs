@@ -7,24 +7,24 @@ fn main() {
     let (w, h) = (200.0, 200.0);
     let (cx, cy) = (w / 2.0, h / 2.0);
     let centre = Vector2::new(cx, cy);
-    let (mut rl, thr) = raylib::init()
+    let (mut handle, thr) = raylib::init()
         .size(w as i32, h as i32)
         .title("Clock") // WM_CLASS
         .build();
-    rl.set_target_fps(15);
-    rl.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
+    handle.set_target_fps(15);
+    handle.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
     let pointers = Pointers::default();
     let clock = Clock::default();
-    let background = Background::new(&mut rl, &thr, centre, clock.rotation).unwrap();
-    rl.set_window_title(&thr, "Kodumaro Clock");
+    let background = Background::new(&mut handle, &thr, centre, clock.rotation).unwrap();
+    handle.set_window_title(&thr, "Kodumaro Clock");
 
-    while !rl.window_should_close() {
-        if rl.is_key_released(KeyboardKey::KEY_Q) {
+    while !handle.window_should_close() {
+        if handle.is_key_released(KeyboardKey::KEY_Q) {
             break;
         }
 
         let angles = clock.get_angles().unwrap();
-        let mut draw = rl.begin_drawing(&thr);
+        let mut draw = handle.begin_drawing(&thr);
         {
             let camera = Camera2D {
                 zoom: 1.0,
