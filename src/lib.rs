@@ -9,5 +9,5 @@ pub mod prelude {
     pub use crate::clock::{Clock, ClockValues};
     pub use crate::drawable::Drawable;
     pub use crate::error::Error;
-    pub use crate::pointers::Pointers;
+    pub use crate::pointers::{PointerDrawer, Pointers};
 }

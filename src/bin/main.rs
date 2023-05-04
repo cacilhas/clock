@@ -39,17 +39,7 @@ fn main() {
                 draw.draw_circle_lines(cx as i32, cy as i32, r as f32, pointers.foreground);
             }
 
-            let x = cx + pointers.hour * angles.hour.cos();
-            let y = cy + pointers.hour * angles.hour.sin();
-            draw.draw_line_ex(centre, Vector2::new(x, y), 5.0, pointers.foreground);
-
-            let x = cx + pointers.min * angles.min.cos();
-            let y = cy + pointers.min * angles.min.sin();
-            draw.draw_line_ex(centre, Vector2::new(x, y), 2.0, pointers.foreground);
-
-            let x = cx + pointers.sec * angles.sec.cos();
-            let y = cy + pointers.sec * angles.sec.sin();
-            draw.draw_line_ex(centre, Vector2::new(x, y), 1.0, pointers.secscolour);
+            PointerDrawer::new(&pointers, &angles, centre).draw(&mut draw);
         }
     }
 }
