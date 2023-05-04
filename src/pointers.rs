@@ -13,6 +13,7 @@ pub struct Pointers {
 }
 
 impl Default for Pointers {
+    #[inline]
     fn default() -> Self {
         Self {
             background: Color::new(0x00, 0x00, 0x00, 0x00),
@@ -32,6 +33,7 @@ pub struct PointerDrawer<'a> {
 }
 
 impl<'a> PointerDrawer<'a> {
+    #[inline]
     pub fn new(
         pointers: &'a Pointers,
         angles: &'a ClockValues,

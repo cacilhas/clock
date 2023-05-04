@@ -29,6 +29,7 @@ impl Clock {
         Ok(ClockValues { hour, min, sec })
     }
 
+    #[inline]
     fn get_angle(value: f32, max_value: f32) -> f32 {
         let offset = -TAU / 4.0;
         value * TAU / max_value + offset
@@ -51,6 +52,7 @@ pub struct ClockValues {
 }
 
 impl From<ClockValues> for (f32, f32, f32) {
+    #[inline]
     fn from(val: ClockValues) -> Self {
         (val.hour, val.min, val.sec)
     }
