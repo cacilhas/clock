@@ -1,9 +1,6 @@
 extern crate kodumaro_clock;
 
-use std::{f32::consts::TAU, time::SystemTime};
-
-use chrono::{DateTime, Local, NaiveTime, Utc};
-use kodumaro_clock::error::Error;
+use kodumaro_clock::prelude::*;
 use raylib::prelude::*;
 
 fn main() {
@@ -23,9 +20,7 @@ fn main() {
     let min_pointer = 90.0;
     let sec_pointer = 95.0;
 
-    let tz: DateTime<Local> = SystemTime::now().into();
-    let tz = tz.offset().local_minus_utc() as f32 / 3600.0;
-    let rotation = -360.0 * tz / 12.0; // Raylib DrawTexturePro uses degrees instead of radians
+    let clock = Clock::default();
 
     // Hour numbers
     let (backhours, img) =
@@ -51,11 +46,7 @@ fn main() {
     rl.set_window_title(&thr, "Kodumaro Clock");
 
     while !rl.window_should_close() {
-        let (hours, mins, secs) = get_time().unwrap();
-        let secs_angle = get_angle(secs, 60.0);
-        let mins_angle = get_angle(mins, 60.0);
-        let hours_angle = get_angle(hours, 12.0);
-
+        let angles = clock.get_angles().unwrap();
         let mut draw = rl.begin_drawing(&thr);
         {
             let camera = Camera2D {
@@ -70,7 +61,7 @@ fn main() {
                 &backhours_rect,
                 &backhours_center_rect,
                 centre,
-                rotation,
+                clock.rotation,
                 Color::WHITE,
             );
             draw.draw_texture(&backmins, 0, 0, Color::WHITE);
@@ -80,16 +71,16 @@ fn main() {
                 draw.draw_circle_lines(cx as i32, cy as i32, r as f32, foreground);
             }
 
-            let x = cx + hour_pointer * hours_angle.cos();
-            let y = cy + hour_pointer * hours_angle.sin();
+            let x = cx + hour_pointer * angles.hour.cos();
+            let y = cy + hour_pointer * angles.hour.sin();
             draw.draw_line_ex(centre, Vector2::new(x, y), 5.0, foreground);
 
-            let x = cx + min_pointer * mins_angle.cos();
-            let y = cy + min_pointer * mins_angle.sin();
+            let x = cx + min_pointer * angles.min.cos();
+            let y = cy + min_pointer * angles.min.sin();
             draw.draw_line_ex(centre, Vector2::new(x, y), 2.0, foreground);
 
-            let x = cx + sec_pointer * secs_angle.cos();
-            let y = cy + sec_pointer * secs_angle.sin();
+            let x = cx + sec_pointer * angles.sec.cos();
+            let y = cy + sec_pointer * angles.sec.sin();
             draw.draw_line_ex(centre, Vector2::new(x, y), 1.0, secscolour);
         }
     }
@@ -106,20 +97,4 @@ fn load_texture(
         .load_texture_from_image(&thr, &image)
         .or_else(|err| Err(Error(err)))?;
     Ok((texture, image))
-}
-
-fn get_time() -> anyhow::Result<(f32, f32, f32)> {
-    let midnight =
-        NaiveTime::from_hms_opt(0, 0, 0).ok_or(Error("could not get midnight".to_owned()))?;
-    let time = Utc::now().time() - midnight;
-    let time = (time.num_milliseconds() as f32) / 1_000.0;
-    let secs = time % 60.0;
-    let mins = (time / 60.0) % 60.0;
-    let hours = (time / 3600.0) % 12.0;
-    Ok((hours, mins, secs))
-}
-
-fn get_angle(value: f32, max_value: f32) -> f32 {
-    let offset = -TAU / 4.0;
-    value * TAU / max_value + offset
 }
