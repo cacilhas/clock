@@ -50,8 +50,8 @@ pub struct ClockValues {
     pub sec: f32,
 }
 
-impl Into<(f32, f32, f32)> for ClockValues {
-    fn into(self) -> (f32, f32, f32) {
-        (self.hour, self.min, self.sec)
+impl From<ClockValues> for (f32, f32, f32) {
+    fn from(val: ClockValues) -> Self {
+        (val.hour, val.min, val.sec)
     }
 }

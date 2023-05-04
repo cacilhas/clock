@@ -30,7 +30,7 @@ fn main() {
                 zoom: 1.0,
                 ..Default::default()
             };
-            let mut draw = draw.begin_mode2D(&camera);
+            let mut draw = draw.begin_mode2D(camera);
 
             draw.clear_background(pointers.background);
             background.draw(&mut draw);

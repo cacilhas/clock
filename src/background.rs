@@ -50,11 +50,9 @@ impl Background {
         thr: &RaylibThread,
         raw: &[u8],
     ) -> anyhow::Result<(Texture2D, Image)> {
-        let image = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32)
-            .or_else(|err| Err(Error(err)))?;
+        let image = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32).map_err(Error)?;
         let texture = handle
-            .load_texture_from_image(&thr, &image)
-            .or_else(|err| Err(Error(err)))?;
+            .load_texture_from_image(thr, &image).map_err(Error)?;
         Ok((texture, image))
     }
 }
@@ -63,8 +61,8 @@ impl Drawable for Background {
     fn draw(&self, draw: &mut impl RaylibDraw) {
         draw.draw_texture_pro(
             &self.hour_texture,
-            &self.hour_rect,
-            &self.centre_rect,
+            self.hour_rect,
+            self.centre_rect,
             self.centre,
             self.rotation,
             Color::WHITE,
