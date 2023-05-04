@@ -1,6 +1,9 @@
-use std::{f32::consts::TAU, io, time::SystemTime};
+extern crate kodumaro_clock;
+
+use std::{f32::consts::TAU, time::SystemTime};
 
 use chrono::{DateTime, Local, NaiveTime, Utc};
+use kodumaro_clock::error::Error;
 use raylib::prelude::*;
 
 fn main() {
@@ -25,7 +28,8 @@ fn main() {
     let rotation = -360.0 * tz / 12.0; // Raylib DrawTexturePro uses degrees instead of radians
 
     // Hour numbers
-    let (backhours, img) = load_texture(&mut rl, &thr, include_bytes!("assets/hours.png")).unwrap();
+    let (backhours, img) =
+        load_texture(&mut rl, &thr, include_bytes!("../assets/hours.png")).unwrap();
     let backhours_rect = Rectangle {
         width: img.width() as f32,
         height: img.height() as f32,
@@ -39,10 +43,10 @@ fn main() {
     };
 
     // Minute numbers
-    let (backmins, _) = load_texture(&mut rl, &thr, include_bytes!("assets/mins.png")).unwrap();
+    let (backmins, _) = load_texture(&mut rl, &thr, include_bytes!("../assets/mins.png")).unwrap();
 
     // UTC
-    let (backutc, _) = load_texture(&mut rl, &thr, include_bytes!("assets/utc.png")).unwrap();
+    let (backutc, _) = load_texture(&mut rl, &thr, include_bytes!("../assets/utc.png")).unwrap();
 
     rl.set_window_title(&thr, "Kodumaro Clock");
 
@@ -95,14 +99,18 @@ fn load_texture(
     rl: &mut RaylibHandle,
     thr: &RaylibThread,
     raw: &[u8],
-) -> Result<(Texture2D, Image), String> {
-    let img = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32).unwrap();
-    Ok((rl.load_texture_from_image(&thr, &img)?, img))
+) -> anyhow::Result<(Texture2D, Image)> {
+    let image = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32)
+        .or_else(|err| Err(Error(err)))?;
+    let texture = rl
+        .load_texture_from_image(&thr, &image)
+        .or_else(|err| Err(Error(err)))?;
+    Ok((texture, image))
 }
 
-fn get_time() -> io::Result<(f32, f32, f32)> {
+fn get_time() -> anyhow::Result<(f32, f32, f32)> {
     let midnight =
-        NaiveTime::from_hms_opt(0, 0, 0).ok_or(io::Error::from(io::ErrorKind::InvalidData))?;
+        NaiveTime::from_hms_opt(0, 0, 0).ok_or(Error("could not get midnight".to_owned()))?;
     let time = Utc::now().time() - midnight;
     let time = (time.num_milliseconds() as f32) / 1_000.0;
     let secs = time % 60.0;
