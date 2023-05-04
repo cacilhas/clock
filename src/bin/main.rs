@@ -13,13 +13,7 @@ fn main() {
         .build();
     rl.set_target_fps(15);
     rl.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
-    let foreground = Color::BLACK;
-    let secscolour = Color::RED;
-    let background = Color::new(0x00, 0x00, 0x00, 0x00);
-    let hour_pointer = 50.0;
-    let min_pointer = 90.0;
-    let sec_pointer = 95.0;
-
+    let pointers = Pointers::default();
     let clock = Clock::default();
 
     // Hour numbers
@@ -55,7 +49,7 @@ fn main() {
             };
             let mut draw = draw.begin_mode2D(&camera);
 
-            draw.clear_background(background);
+            draw.clear_background(pointers.background);
             draw.draw_texture_pro(
                 &backhours,
                 &backhours_rect,
@@ -68,20 +62,20 @@ fn main() {
             draw.draw_texture(&backutc, 0, 0, Color::WHITE);
 
             for r in 98..100 {
-                draw.draw_circle_lines(cx as i32, cy as i32, r as f32, foreground);
+                draw.draw_circle_lines(cx as i32, cy as i32, r as f32, pointers.foreground);
             }
 
-            let x = cx + hour_pointer * angles.hour.cos();
-            let y = cy + hour_pointer * angles.hour.sin();
-            draw.draw_line_ex(centre, Vector2::new(x, y), 5.0, foreground);
+            let x = cx + pointers.hour * angles.hour.cos();
+            let y = cy + pointers.hour * angles.hour.sin();
+            draw.draw_line_ex(centre, Vector2::new(x, y), 5.0, pointers.foreground);
 
-            let x = cx + min_pointer * angles.min.cos();
-            let y = cy + min_pointer * angles.min.sin();
-            draw.draw_line_ex(centre, Vector2::new(x, y), 2.0, foreground);
+            let x = cx + pointers.min * angles.min.cos();
+            let y = cy + pointers.min * angles.min.sin();
+            draw.draw_line_ex(centre, Vector2::new(x, y), 2.0, pointers.foreground);
 
-            let x = cx + sec_pointer * angles.sec.cos();
-            let y = cy + sec_pointer * angles.sec.sin();
-            draw.draw_line_ex(centre, Vector2::new(x, y), 1.0, secscolour);
+            let x = cx + pointers.sec * angles.sec.cos();
+            let y = cy + pointers.sec * angles.sec.sin();
+            draw.draw_line_ex(centre, Vector2::new(x, y), 1.0, pointers.secscolour);
         }
     }
 }
