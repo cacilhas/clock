@@ -9,7 +9,7 @@ fn main() {
     let centre = Vector2::new(cx, cy);
     let (mut rl, thr) = raylib::init()
         .size(w as i32, h as i32)
-        .title("Clock")
+        .title("Clock") // WM_CLASS
         .build();
     rl.set_target_fps(15);
     rl.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
