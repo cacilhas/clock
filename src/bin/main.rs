@@ -40,6 +40,10 @@ fn main() {
     rl.set_window_title(&thr, "Kodumaro Clock");
 
     while !rl.window_should_close() {
+        if rl.is_key_released(KeyboardKey::KEY_Q) {
+            break;
+        }
+
         let angles = clock.get_angles().unwrap();
         let mut draw = rl.begin_drawing(&thr);
         {
