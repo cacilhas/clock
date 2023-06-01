@@ -10,6 +10,7 @@ fn main() {
     let (mut handle, thr) = raylib::init()
         .size(w as i32, h as i32)
         .title("Clock") // WM_CLASS
+        .transparent()
         .build();
     handle.set_target_fps(15);
     handle.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
