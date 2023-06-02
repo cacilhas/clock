@@ -1,6 +1,6 @@
 [package]
 name        = "kodumaro-clock"
-version     = "1.0.0"
+version     = "1.0.1"
 authors     = ["Rodrigo Montegasppα Cacilhας <montegasppa@cacilhas.info"]
 license     = "BSD-3-Clause"
 readme      = "README.md"
@@ -21,9 +21,5 @@ strip = true
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"
+raylib = "3.7"
 thiserror = "1.0"
-
-[dependencies.raylib]
-version = "4.5"
-git = "https://github.com/litten2up/raylib-rs"
-branch = "4.5.0"
