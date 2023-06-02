@@ -9,9 +9,11 @@ fn main() {
     let centre = Vector2::new(cx, cy);
     let (mut handle, thr) = raylib::init()
         .size(w as i32, h as i32)
-        .title("Clock") // WM_CLASS
+        .title("kodumaro-clock") // WM_CLASS
         .transparent()
+        .undecorated()
         .build();
+    handle.set_window_title(&thr, "Clock");
     handle.set_target_fps(15);
     handle.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
     let pointers = Pointers::default();
