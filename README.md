@@ -1,6 +1,6 @@
 # kodumaro-clock
 
-![screenshot](https://github.com/cacilhas/clock/blob/master/screenshot.png)
+![screenshot](https://github.com/cacilhas/clock/raw/master/screenshot.png)
 
 Yet another [X11](https://en.wikipedia.org/wiki/X_Window_System) clock.
 
