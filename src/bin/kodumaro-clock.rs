@@ -13,7 +13,6 @@ fn main() {
         .transparent()
         .undecorated()
         .build();
-    handle.set_window_title(&thr, "Clock");
     handle.set_target_fps(15);
     handle.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
     let pointers = Pointers::default();
