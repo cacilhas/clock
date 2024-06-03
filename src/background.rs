@@ -19,7 +19,7 @@ impl Background {
         thr: &RaylibThread,
         centre: Vector2,
         rotation: f32,
-    ) -> anyhow::Result<Background> {
+    ) -> eyre::Result<Background> {
         let (hour_texture, img) =
             Self::load_texture(handle, thr, include_bytes!("assets/hours.png"))?;
         let hour_rect = Rectangle {
@@ -49,10 +49,9 @@ impl Background {
         handle: &mut RaylibHandle,
         thr: &RaylibThread,
         raw: &[u8],
-    ) -> anyhow::Result<(Texture2D, Image)> {
-        let image = Image::load_image_from_mem(".png", &raw.to_vec(), raw.len() as i32).map_err(Error)?;
-        let texture = handle
-            .load_texture_from_image(thr, &image).map_err(Error)?;
+    ) -> eyre::Result<(Texture2D, Image)> {
+        let image = Image::load_image_from_mem(".png", &raw.to_vec()).map_err(Error)?;
+        let texture = handle.load_texture_from_image(thr, &image).map_err(Error)?;
         Ok((texture, image))
     }
 }

@@ -1,9 +1,11 @@
 extern crate kodumaro_clock;
 
+use std::error;
+
 use kodumaro_clock::prelude::*;
 use raylib::prelude::*;
 
-fn main() {
+fn main() -> Result<(), Box<dyn error::Error>> {
     let (w, h) = (200.0, 200.0);
     let (cx, cy) = (w / 2.0, h / 2.0);
     let centre = Vector2::new(cx, cy);
@@ -17,7 +19,7 @@ fn main() {
     handle.set_exit_key(Some(KeyboardKey::KEY_ESCAPE));
     let pointers = Pointers::default();
     let clock = Clock::default();
-    let background = Background::new(&mut handle, &thr, centre, clock.rotation).unwrap();
+    let background = Background::new(&mut handle, &thr, centre, clock.rotation)?;
     handle.set_window_title(&thr, "Kodumaro Clock");
 
     while !handle.window_should_close() {
@@ -25,7 +27,7 @@ fn main() {
             break;
         }
 
-        let angles = clock.get_angles().unwrap();
+        let angles = clock.get_angles()?;
         let mut draw = handle.begin_drawing(&thr);
         {
             let camera = Camera2D {
@@ -44,4 +46,6 @@ fn main() {
             PointerDrawer::new(&pointers, &angles, centre).draw(&mut draw);
         }
     }
+
+    Ok(())
 }

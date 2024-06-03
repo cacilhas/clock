@@ -10,7 +10,7 @@ pub struct Clock {
 }
 
 impl Clock {
-    pub fn get_time(&self) -> anyhow::Result<ClockValues> {
+    pub fn get_time(&self) -> eyre::Result<ClockValues> {
         let midnight =
             NaiveTime::from_hms_opt(0, 0, 0).ok_or(Error("could not get midnight".to_owned()))?;
         let time = Utc::now().time() - midnight;
@@ -21,7 +21,7 @@ impl Clock {
         Ok(ClockValues { hour, min, sec })
     }
 
-    pub fn get_angles(&self) -> anyhow::Result<ClockValues> {
+    pub fn get_angles(&self) -> eyre::Result<ClockValues> {
         let (hour, min, sec) = self.get_time()?.into();
         let sec = Self::get_angle(sec, 60.0);
         let min = Self::get_angle(min, 60.0);
